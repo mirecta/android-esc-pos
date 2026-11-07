@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Prolific PL2303 (vendor-id 0x067B) -->
+    <usb-device vendor-id="1659" />
+</resources>
