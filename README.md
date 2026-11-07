@@ -1,5 +1,7 @@
 # android-esc-pos
 
+🇸🇰 [Slovenská verzia](README.sk.md)
+
 Two minimal Android apps (Kotlin and Flutter) that print text on an ESC/POS
 receipt printer connected via a **USB-serial PL2303** adapter (USB OTG) and cut the paper.
 
@@ -48,14 +50,3 @@ Requirements: Android SDK, JDK 17+, Flutter 3.41+. `esc-kotlin` needs a
 | text + `\n` | body (diacritics stripped – the printer does not use UTF-8) |
 | `1B 64 08` | `ESC d 8` – feed 8 lines (fewer lines jam the paper in the presenter) |
 | `1D 56 00` | `GS V 0` – full cut (`01` = partial) |
-
-## Lessons learned (PL2303 + this printer)
-
-- **The port stays open between prints.** Closing a PL2303 port in usb-serial-for-android
-  purges the adapter's FIFO, dropping data that hasn't reached the printer yet
-  (symptom: `@@@@` on paper, no cut).
-- **No hardware RTS/CTS flow control.** The printer is set to `H/W` but signals readiness on **DSR**;
-  CTS stays low, so with RTS/CTS on the adapter never sends anything.
-  PL2303 can't do DTR/DSR flow control in hardware, so the app does it in software:
-  it sends 64 B chunks and waits for DSR before each one (5 s timeout → "printer not ready" error).
-- Wait ~100 ms after opening the port before the first write, otherwise the first byte may get garbled.
